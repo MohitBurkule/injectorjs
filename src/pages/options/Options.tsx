@@ -1,23 +1,38 @@
-import logo from "@assets/img/logo.svg";
+import { createSignal, onMount } from "solid-js";
 import "@src/styles/index.css";
 import styles from "./Options.module.css";
 
 const Options = () => {
+  const [scripts, setScripts] = createSignal<{ [key: string]: string }>({});
+
+  const loadScripts = () => {
+    chrome.storage.local.get(null, (items) => {
+      setScripts(items);
+    });
+  };
+
+  const deleteScript = (url: string) => {
+    chrome.storage.local.remove(url, () => {
+      loadScripts();
+    });
+  };
+
+  onMount(() => {
+    loadScripts();
+  });
+
   return (
     <div class={styles.App}>
       <header class={styles.header}>
-        <img src={logo} class={styles.logo} alt="logo" />
-        <p class="font-bold">
-          Edit <code>src/pages/options/Options.tsx</code> and save to reload.
-        </p>
-        <a
-          class={styles.link}
-          href="https://github.com/solidjs/solid"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Solid
-        </a>
+        <h1>Manage Scripts</h1>
+        <ul>
+          {Object.entries(scripts()).map(([key, value]) => (
+            <li>
+              <strong>{key}:</strong> {value}
+              <button onClick={() => deleteScript(key)}>Delete</button>
+            </li>
+          ))}
+        </ul>
       </header>
     </div>
   );
