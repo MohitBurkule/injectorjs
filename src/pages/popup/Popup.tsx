@@ -7,10 +7,12 @@ const Popup = () => {
   const [scripts, setScripts] = createSignal<{ [key: string]: string }>({});
 
   const saveScript = () => {
-    const url = window.location.href;
-    chrome.storage.local.set({ [url]: script() }, () => {
-      alert(`Script saved for ${url}`);
-      loadScripts();
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const url = tabs[0].url;
+      chrome.storage.local.set({ [url]: script() }, () => {
+        alert(`Script saved for ${url}`);
+        loadScripts();
+      });
     });
   };
 
