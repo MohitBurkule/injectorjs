@@ -64,9 +64,9 @@ const Popup = () => {
           placeholder="Enter your JavaScript code here..."
           value={script()}
           onInput={(e) => setScript(e.currentTarget.value)}
-        />
-        <button onClick={saveScript}>Save Script</button>
-        <button onClick={backupScripts}>Backup Scripts</button>
+        ></textarea>
+        <button type="button" onClick={saveScript}>Save Script</button>
+        <button type="button" onClick={backupScripts}>Backup Scripts</button>
         <input type="file" accept=".json" onChange={restoreScripts} />
         <h2>Saved Scripts</h2>
         <ul>
